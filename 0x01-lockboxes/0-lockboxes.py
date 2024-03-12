@@ -20,8 +20,12 @@ def canUnlockAll(boxes):
       True if all boxes can be opened, else return False
 
     """
-    if not boxes:
-        return True
+    if type(boxes) is not list:
+        return False
+
+    if len(boxes) == 0:
+        return False
+
     visited = set([0])
     queue = [boxes[0]]
 
