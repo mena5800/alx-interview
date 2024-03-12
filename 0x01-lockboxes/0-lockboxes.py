@@ -27,13 +27,13 @@ def canUnlockAll(boxes):
         return False
 
     visited = set([0])
-    queue = [boxes[0]]
+    stack = [boxes[0]]
 
-    while queue:
-        boxes_to_visit = queue.pop(0)
+    while stack:
+        boxes_to_visit = stack.pop()
 
         for box in boxes_to_visit:
             if box not in visited:
                 visited.add(box)
-                queue.append(boxes[box])
+                stack.append(boxes[box])
     return True if len(boxes) == len(visited) else False
