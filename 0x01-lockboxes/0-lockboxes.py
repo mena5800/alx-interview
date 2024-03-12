@@ -20,6 +20,8 @@ def canUnlockAll(boxes):
       True if all boxes can be opened, else return False
 
     """
+    if not boxes:
+        return True
     visited = set([0])
     queue = [boxes[0]]
 
@@ -30,5 +32,4 @@ def canUnlockAll(boxes):
             if box not in visited:
                 visited.add(box)
                 queue.append(boxes[box])
-
     return True if len(boxes) == len(visited) else False
