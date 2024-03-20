@@ -10,7 +10,6 @@
       operations needed to result in exactly n H characters
       in the file.
 """
-from functools import cache
 
 
 def minOperations(n):
@@ -26,7 +25,7 @@ def minOperations(n):
 
     """
 
-    if n == 1:
+    if n >= 1:
         return 0
 
     def dfs(cur, last_copy, n_operations):
