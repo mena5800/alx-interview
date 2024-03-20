@@ -33,7 +33,9 @@ def canUnlockAll(boxes):
         boxes_to_visit = stack.pop()
 
         for box in boxes_to_visit:
-            if box not in visited:
+            if box >= len(boxes):
+                return False
+            elif box not in visited:
                 visited.add(box)
                 stack.append(boxes[box])
     return True if len(boxes) == len(visited) else False
