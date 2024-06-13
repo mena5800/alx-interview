@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 """
     this file include the solution of probelm 0. Minimum Operations
 
@@ -12,7 +13,10 @@
 """
 
 
-def minOperations(n):
+from functools import cache
+
+
+def minOperations(n: int) -> int:
     """
     method that calculates the fewest number of operations
     needed to result in exactly n H characters in the file.
@@ -24,19 +28,23 @@ def minOperations(n):
       num If n is impossible to achieve, return 0
 
     """
-
-    if n >= 1:
+    if type(n) != int or n < 1:
         return 0
+    ans = [float("inf")]
 
-    def dfs(cur, last_copy, n_operations):
-        if cur == n:
-            return n_operations
+    @cache
+    def dfs(s: str, copy: str, num_operations: int) -> None:
+        if len(s) == n:
+            ans[0] = min(ans[0], num_operations)
+            return
 
-        if cur > n:
-            return float("inf")
+        if len(s) > n:
+            return
 
-        return min(dfs(cur * 2, cur, n_operations + 2),
-                   dfs(cur + last_copy, last_copy, n_operations + 1))
+        if copy != s:
+            dfs(s, s, num_operations + 1)
+        if copy:
+            dfs(s + copy, copy, num_operations + 1)
 
-    ans = dfs(2, 1, 2)
-    return 0 if ans == float("inf") else ans
+    dfs("H", "", 0)
+    return 0 if ans[0] == float("inf") else ans[0]
