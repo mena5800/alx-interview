@@ -28,21 +28,13 @@ def minOperations(n):
     if type(n) != int or n < 1:
         return 0
 
-    def dfs(s, copy, num_operations):
+    operations = 0
+    factor = 2
 
-        if len(s) == n:
-            return num_operations
+    while n > 1:
+        while n % factor == 0:
+            operations += factor
+            n //= factor
+        factor += 1
 
-        if len(s) > n:
-            return float("inf")
-
-        if copy != s and copy:
-            return min(dfs(s, s, num_operations + 1),
-                       dfs(s + copy, copy, num_operations + 1))
-        elif copy == "":
-            return dfs(s, s, num_operations + 1)
-        else:
-            return dfs(s + copy, copy, num_operations + 1)
-
-    ans = dfs("H", "", 0)
-    return 0 if ans == float("inf") else ans
+    return operations
