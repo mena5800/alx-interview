@@ -15,23 +15,22 @@ def validUTF8(data):
       bool : True if valid utf otherwise False.
 
     """
-    n_bytes = 0
-    
+    n_bits = 0
     for num in data:
-        if n_bytes == 0:
-            # Determine the number of bytes in the UTF-8 character
-            if (num >> 5) == 0b110:
-                n_bytes = 1
-            elif (num >> 4) == 0b1110:
-                n_bytes = 2
-            elif (num >> 3) == 0b11110:
-                n_bytes = 3
-            elif (num >> 7):
-                return False  # 10xxxxxx or 11111xxx are invalid starting bytes
-        else:
-            # Check that the byte follows the pattern 10xxxxxx
-            if (num >> 6) != 0b10:
+        print((num >> 7) & 1)
+        if n_bits > 0:
+            # check the msb is 1 and 7th bit is 0
+            if (((num >> 7) & 1) and ((num >> 6) & 1) == 0):
+                n_bits -= 1
+            else:
                 return False
-            n_bytes -= 1
-
-    return n_bytes == 0
+        elif ((num >> 7) & 1) == 0:
+            continue
+        else:
+            i = 6
+            while ((num >> i) & 1):
+                n_bits += 1
+                i -= 1
+            if n_bits == 0:
+                return False
+    return True if n_bits == 0 else False
