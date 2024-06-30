@@ -17,20 +17,21 @@ def validUTF8(data):
     """
     n_bits = 0
     for num in data:
-        print((num >> 7) & 1)
         if n_bits > 0:
             # check the msb is 1 and 7th bit is 0
-            if (((num >> 7) & 1) and ((num >> 6) & 1) == 0):
+            if ((num >> 6) & 0b11) == 0b10:
                 n_bits -= 1
             else:
                 return False
         elif ((num >> 7) & 1) == 0:
             continue
         else:
-            i = 6
-            while ((num >> i) & 1):
-                n_bits += 1
-                i -= 1
-            if n_bits == 0:
+            if ((num >> 3) & 0b11111) == 0b11110:
+                n_bits = 3
+            elif ((num >> 4) & 0b1111) == 0b1110:
+                n_bits = 2
+            elif ((num >> 5) & 0b111) == 0b110:
+                n_bits = 1
+            else:
                 return False
     return True if n_bits == 0 else False
