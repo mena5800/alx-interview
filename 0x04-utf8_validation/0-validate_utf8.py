@@ -3,7 +3,7 @@
 data set represents a valid UTF-8 encoding."""
 
 
-def validUTF8(data: list[int]) -> bool:
+def validUTF8(data):
     """
     method that determines if a given data set
     represents a valid UTF-8 encoding or not.
