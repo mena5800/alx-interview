@@ -17,6 +17,8 @@ def validUTF8(data):
     """
     n_bits = 0
     for num in data:
+        if (num >> 7) > 1:
+            return False
         if n_bits > 0:
             # check the msb is 1 and 7th bit is 0
             if ((num >> 7) and ((num >> 6) & 1) == 0):
