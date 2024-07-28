@@ -21,16 +21,17 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
     dp = [float("inf")] * (total + 1)
+    coins.sort()
+    for coin in coins:
+        dp[coin] = 1
 
     for i in range(1, len(dp)):
-        if i in coins:
-            dp[i] = 1
-
-        else:
+        if dp[i] != 1:
             for coin in coins:
+                if coin > i:
+                    break
                 if dp[i - coin] == float("inf"):
                     continue
-
                 dp[i] = min(dp[i], dp[i - coin] + 1)
 
     return -1 if dp[-1] == float("inf") else dp[-1]
