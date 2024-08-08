@@ -25,7 +25,7 @@ def isWinner(x, nums):
     primes = [i for i in range(1, max_num + 1)]
     i = 1
     mul = 2
-    while primes:
+    while len(primes) > 1:
         while primes[i] * mul <= max_num:
             if primes[i] * mul in primes:
                 primes.remove(primes[i] * mul)
@@ -45,7 +45,9 @@ def isWinner(x, nums):
     for i in range(1, len(primes) - 1):
         win.extend([turn] * (primes[i + 1] - primes[i]))
         turn = 0 if turn == 1 else 1
-
+    if len(win) == 1:
+        win.append(1)
+        
     if len(win) != max_num:
         win.extend([win[-1]] * (max_num - len(win)))
 
@@ -54,7 +56,7 @@ def isWinner(x, nums):
             Ben += 1
         else:
             Maria += 1
-
+    print(win)
     if Maria > Ben:
         return "Maria"
     elif Maria < Ben:

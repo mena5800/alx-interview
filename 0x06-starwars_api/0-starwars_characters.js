@@ -1,4 +1,5 @@
-const request = require("request");
+#!/usr/bin/node
+const request = require('request');
 
 if (process.argv.length !== 3) {
   console.error("Usage: node 0-starwars_characters.js <movie_id>");
