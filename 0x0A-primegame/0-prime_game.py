@@ -7,6 +7,7 @@ def sieve_of_eratosthenes(n):
     """Generate a list of prime numbers up to n
     using the Sieve of Eratosthenes."""
     is_prime = [True] * (n + 1)
+    is_prime[0] = is_prime[1] = False
     p = 2
     while p * p <= n:
         if is_prime[p]:
@@ -14,6 +15,16 @@ def sieve_of_eratosthenes(n):
                 is_prime[i] = False
         p += 1
     return [p for p in range(2, n + 1) if is_prime[p]]
+
+
+def count_primes(n, primes):
+    """Count how many primes are <= n."""
+    count = 0
+    for prime in primes:
+        if prime > n:
+            break
+        count += 1
+    return count
 
 
 def isWinner(x, nums):
@@ -40,23 +51,12 @@ def isWinner(x, nums):
     ben_wins = 0
 
     for n in nums:
-        primes_set = set(primes)
-        available_numbers = set(range(1, n + 1))
-        turn = 0  # Maria's turn is even, Ben's turn is odd
-
-        while True:
-            current_primes = [p for p in primes_set if p in available_numbers]
-            if not current_primes:
-                if turn % 2 == 0:
-                    ben_wins += 1
-                else:
-                    maria_wins += 1
-                break
-
-            chosen_prime = current_primes[0]
-            multiples = set(range(chosen_prime, n + 1, chosen_prime))
-            available_numbers -= multiples
-            turn += 1
+        prime_count = count_primes(n, primes)
+        # Maria wins if the number of primes is odd, Ben wins if it's even
+        if prime_count % 2 == 1:
+            maria_wins += 1
+        else:
+            ben_wins += 1
 
     if maria_wins > ben_wins:
         return "Maria"
