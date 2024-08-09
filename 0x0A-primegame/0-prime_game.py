@@ -3,6 +3,19 @@
 the winner of prime game"""
 
 
+def sieve_of_eratosthenes(n):
+    """Generate a list of prime numbers up to n
+    using the Sieve of Eratosthenes."""
+    is_prime = [True] * (n + 1)
+    p = 2
+    while p * p <= n:
+        if is_prime[p]:
+            for i in range(p * p, n + 1, p):
+                is_prime[i] = False
+        p += 1
+    return [p for p in range(2, n + 1) if is_prime[p]]
+
+
 def isWinner(x, nums):
     """
     Maria and Ben are playing a game.
@@ -17,49 +30,37 @@ def isWinner(x, nums):
     Return:
       winner name (Ben, Maria) or None if draw
     """
-    Ben = 0
-    Maria = 0
+    if x <= 0 or not nums:
+        return None
 
     max_num = max(nums)
+    primes = sieve_of_eratosthenes(max_num)
 
-    primes = [i for i in range(1, max_num + 1)]
-    i = 1
-    mul = 2
-    while len(primes) > 1:
-        while primes[i] * mul <= max_num:
-            if primes[i] * mul in primes:
-                primes.remove(primes[i] * mul)
-            mul += 1
+    maria_wins = 0
+    ben_wins = 0
 
-        i += 1
-        mul = 2
-        if i == len(primes):
-            break
+    for n in nums:
+        primes_set = set(primes)
+        available_numbers = set(range(1, n + 1))
+        turn = 0  # Maria's turn is even, Ben's turn is odd
 
-    nums.sort()
-    i = 1
-    # ben 0 - maria 1
-    win = [0]
-    turn = 1
+        while True:
+            current_primes = [p for p in primes_set if p in available_numbers]
+            if not current_primes:
+                if turn % 2 == 0:
+                    ben_wins += 1
+                else:
+                    maria_wins += 1
+                break
 
-    for i in range(1, len(primes) - 1):
-        win.extend([turn] * (primes[i + 1] - primes[i]))
-        turn = 0 if turn == 1 else 1
-    if len(win) == 1:
-        win.append(1)
-        
-    if len(win) != max_num:
-        win.extend([win[-1]] * (max_num - len(win)))
+            chosen_prime = current_primes[0]
+            multiples = set(range(chosen_prime, n + 1, chosen_prime))
+            available_numbers -= multiples
+            turn += 1
 
-    for num in nums:
-        if win[num - 1] == 0:
-            Ben += 1
-        else:
-            Maria += 1
-    print(win)
-    if Maria > Ben:
+    if maria_wins > ben_wins:
         return "Maria"
-    elif Maria < Ben:
+    elif ben_wins > maria_wins:
         return "Ben"
-
-    return None
+    else:
+        return None
